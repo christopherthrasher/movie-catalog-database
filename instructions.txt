@@ -1,0 +1,119 @@
+Movie Catalog & Rating System – Setup Instructions
+
+1. Overview
+
+This project is a CLI Movie Catalog and Rating System built with Python and PostgreSQL.
+It loads an external movie dataset from Kaggle into a PostgreSQL database and lets users:
+    
+    - browse movies
+    - search by genre
+    - create user accounts
+    - submit ratings for movies
+    - view ratings for a specific movie
+
+All data is handled by the PostgreSQL database.
+
+2. Tech Stack
+
+Programming language: Python 3
+
+Database: PostgreSQL
+
+Python database library: psycopg3
+
+User interface: Command-line interface (CLI)
+
+3. Project Structure
+
+cs457_final_project/
+    db/
+    - schema.sql # Hand-written schema used to create tables
+    - schema_dump.sql # pg_dump of schema only
+    - data_dump.sql # pg_dump of data only
+
+    data/
+    - movies.csv # Kaggle movie dataset
+
+    src/
+    - config.py # Database connection settings
+    - db_connection.py # Helper to create psycopg3 connection
+    - import_data.py # Script to import movies.csv into the database
+    - models.py # Domain classes
+    - services.py # MovieCatalogService: all database queries
+    - cli.py # Command-line interface
+
+    docs/
+    instructions.txt # Setup and run instructions
+
+4. Prerequisites
+
+PostgreSQL installed and running
+
+Python 3 installed
+
+psycopg installed in Python
+
+5. Database Setup
+
+Create the database
+
+CREATE DATABASE movie_catalog;
+
+Configure connection settings
+Open src/config.py and set the values to match your PostgreSQL setup:
+
+DB_NAME = "movie_catalog"
+DB_USER = "postgres"
+DB_PASSWORD = "password"
+DB_HOST = "localhost"
+DB_PORT = 5432
+
+Create the schema
+In pgAdmin, run the SQL from db/schema.sql against the movie_catalog database to create all tables.
+
+Place the external dataset
+Ensure data/movies.csv exists in the data folder and matches the Kaggle movie dataset used for the project.
+
+Import initial data
+From the project root in a terminal:
+cd src
+python import_data.py
+
+This script reads ../data/movies.csv and populates the database with movies, genres, directors, and actors.
+
+6. Running the Application
+
+From the src folder, run:
+python cli.py
+
+Menu options:
+
+=== Movie Catalog ===
+1) List movies
+2) Search movies by genre
+3) Rate a movie
+4) View ratings for a movie
+5) Exit
+
+Option 1 – List movies
+Displays titles and release years from the database.
+
+Option 2 – Search movies by genre
+Enter a genre name. Displays matching movies.
+
+Option 3 – Rate a movie
+Enter a username. If it doesn’t exist, you’ll be prompted to create one.
+Then enter movie title, year, and a rating from 1 to 10.
+The rating is stored in the rating table.
+
+Option 4 – View ratings for a movie
+Displays all user ratings and the average rating for that movie.
+
+Option 5 – Exit
+Closes the program.
+
+7. Database Dumps
+
+Two dump files are included in the db folder:
+schema_dump.sql
+data_dump.sql
